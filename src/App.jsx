@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+// 利用可能なカテゴリ一覧
+const CATEGORIES = ['買い物', 'やりたいこと', '仕事', 'その他'];
+
 function App() {
   const [todos, setTodos] = useState(() => {
     const saved = localStorage.getItem('app_todos');
     return saved ? JSON.parse(saved) : [
-      { id: 1, text: '牛乳を買う', completed: false },
-      { id: 2, text: 'Reactの勉強をする', completed: true }
+      { id: 1, text: '牛乳を買う', completed: false, category: '買い物' },
+      { id: 2, text: 'Reactの勉強をする', completed: true, category: '仕事' },
+      { id: 3, text: '映画を見に行く', completed: false, category: 'やりたいこと' }
     ];
   });
   const [inputText, setInputText] = useState('');
-  const [filter, setFilter] = useState('all'); // 'all' | 'active' | 'completed'
+  const [inputCategory, setInputCategory] = useState('買い物'); // 追加時のカテゴリ初期値
+  const [filterStatus, setFilterStatus] = useState('all'); // 'all' | 'active' | 'completed'
+  const [filterCategory, setFilterCategory] = useState('all'); // 'all' | 各カテゴリ名
 
   // todos が変更されたら LocalStorage に保存
   useEffect(() => {
@@ -25,7 +31,8 @@ function App() {
     const newTodo = {
       id: Date.now(),
       text: inputText.trim(),
-      completed: false
+      completed: false,
+      category: inputCategory
     };
 
     setTodos([newTodo, ...todos]);
@@ -46,10 +53,15 @@ function App() {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  // フィルター処理後のリスト
+  // フィルター処理後のリスト（状態 ＋ カテゴリ でダブル絞り込み）
   const filteredTodos = todos.filter((todo) => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
+    // 状態フィルター
+    if (filterStatus === 'active' && todo.completed) return false;
+    if (filterStatus === 'completed' && !todo.completed) return false;
+
+    // カテゴリフィルター
+    if (filterCategory !== 'all' && (todo.category || 'その他') !== filterCategory) return false;
+
     return true;
   });
 
@@ -65,38 +77,71 @@ function App() {
 
       {/* タスク入力フォーム */}
       <form className="add-form" onSubmit={handleAddTodo}>
-        <input
-          type="text"
-          className="todo-input"
-          placeholder="新しいタスクを入力..."
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
+        <div className="input-group">
+          <input
+            type="text"
+            className="todo-input"
+            placeholder="新しいタスクを入力..."
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
+          <select
+            className="category-select"
+            value={inputCategory}
+            onChange={(e) => setInputCategory(e.target.value)}
+          >
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
         <button type="submit" className="add-btn">
           追加
         </button>
       </form>
 
-      {/* フィルター切り替えボタン */}
+      {/* 完了・未完了 フィルター */}
       <div className="filter-buttons">
         <button
-          className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
+          className={`filter-btn ${filterStatus === 'all' ? 'active' : ''}`}
+          onClick={() => setFilterStatus('all')}
         >
           すべて
         </button>
         <button
-          className={`filter-btn ${filter === 'active' ? 'active' : ''}`}
-          onClick={() => setFilter('active')}
+          className={`filter-btn ${filterStatus === 'active' ? 'active' : ''}`}
+          onClick={() => setFilterStatus('active')}
         >
           未完了
         </button>
         <button
-          className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
-          onClick={() => setFilter('completed')}
+          className={`filter-btn ${filterStatus === 'completed' ? 'active' : ''}`}
+          onClick={() => setFilterStatus('completed')}
         >
           完了
         </button>
+      </div>
+
+      {/* カテゴリ 絞り込みタブ */}
+      <div className="category-filter">
+        <span className="filter-label">カテゴリ:</span>
+        <button
+          className={`cat-btn ${filterCategory === 'all' ? 'active' : ''}`}
+          onClick={() => setFilterCategory('all')}
+        >
+          すべて
+        </button>
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            className={`cat-btn ${filterCategory === cat ? 'active' : ''}`}
+            onClick={() => setFilterCategory(cat)}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
       {/* タスク一覧 */}
@@ -115,13 +160,18 @@ function App() {
                 <span className="checkmark"></span>
                 <span className="todo-text">{todo.text}</span>
               </label>
-              <button
-                className="delete-btn"
-                onClick={() => deleteTodo(todo.id)}
-                aria-label="削除"
-              >
-                ✕
-              </button>
+              <div className="todo-right">
+                <span className={`category-badge cat-${todo.category || 'その他'}`}>
+                  {todo.category || 'その他'}
+                </span>
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteTodo(todo.id)}
+                  aria-label="削除"
+                >
+                  ✕
+                </button>
+              </div>
             </li>
           ))
         )}

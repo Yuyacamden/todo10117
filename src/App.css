@@ -310,3 +310,167 @@ body {
   color: #a78bfa;
   border: 1px solid #8b5cf644;
 }
+
+
+/* 入力グループのレイアウト調整 */
+.input-group {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.category-select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* カテゴリ追加バー */
+.category-manager-bar {
+  margin-bottom: 12px;
+}
+
+.add-cat-toggle-btn {
+  background: transparent;
+  border: 1px dashed #555;
+  color: #aaa;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.add-cat-toggle-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.add-cat-form {
+  display: flex;
+  gap: 8px;
+}
+
+.cat-name-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #3b82f6;
+  background-color: #1e1e1e;
+  color: #fff;
+  font-size: 13px;
+}
+
+.cat-save-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cat-cancel-btn {
+  background: #333;
+  color: #aaa;
+  border: none;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* カテゴリフィルターエリアと削除ボタン */
+.category-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.filter-label {
+  font-size: 12px;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.cat-btn {
+  background: #252525;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cat-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+/* 削除ボタン付きカテゴリタブ */
+.cat-btn-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #252525;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 4px 8px 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.cat-btn-wrapper.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.cat-delete-x {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 2px;
+  opacity: 0.7;
+}
+
+.cat-delete-x:hover {
+  opacity: 1;
+  color: #ff6b6b;
+}
+
+/* タスク右側のバッジ */
+.todo-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  background-color: #3b82f622;
+  color: #60a5fa;
+  border: 1px solid #3b82f644;
+}
